@@ -1,0 +1,47 @@
+<html>
+<style>
+    body {
+        background: white }
+    section {
+        color: white;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-right: -50%;
+        transform: translate(-50%, -50%) }
+</style>
+
+<script type="text/javascript">
+	function onReceiveUrl(url) {
+    	document.getElementById("video_frame").src=url;
+	}
+
+	function initializeIFrame() {
+		// margin is used to over scrollbar
+		var margin = 0;
+		var width = window.innerWidth
+						|| document.documentElement.clientWidth
+						|| document.body.clientWidth;
+
+		var height = window.innerHeight
+						|| document.documentElement.clientHeight
+						|| document.body.clientHeight;
+
+		var frame = document.getElementById("video_frame");
+		frame.height = height - margin;
+		frame.width = width - margin;	
+
+		// doesn't belong here
+		onReceiveUrl('https://www.youtube.com/embed/e8FI120ItdU?autoplay=1');	
+	}
+
+</script>
+
+<body onload="initializeIFrame()">
+
+<section>
+	<iframe id="video_frame" scrolling="no" frameborder="0" style="border: 0px none transparent"></iframe>
+</section>
+
+</body>
+</html>
