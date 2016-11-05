@@ -1,0 +1,20 @@
+<html>
+<script src="https://apis.google.com/js/api.js"></script>
+<script type="text/javascript">
+	function searchYoutubeByKeyword() {
+		gapi.client.init({
+          'apiKey': 'AIzaSyCVzkiLvCg-oK2aK-ZSiF7xJaXkeHXaAek',
+          'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/translate/v2/rest'],
+        }).then(function() {
+	        	var results = gapi.client.youtube.search.list('id,snippet', {q: 'cats', eventType: 'live', type: 'video', videoEmbeddable: 'true', videoSyndicated: 'true', maxResults: 25});
+				for(var i in results.items) {
+				    var item = results.items[i];
+				    Logger.log('[%s] Title: %s', item.id.videoId, item.snippet.title);
+	  			}
+			});
+    }	
+</script>
+<body onload="gapi.load('client', searchYoutubeByKeyword);">
+
+</body>
+</html>
