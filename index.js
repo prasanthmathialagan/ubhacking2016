@@ -4,6 +4,14 @@ var io = require('socket.io')(http);
 var curators = [];
 var id_counter = 0;
 
+var send_updated_viewers_count = function(io, room_name){
+  	var room = io.sockets.adapter.rooms[room_name];
+	var viewers = room.length - 1;
+	console.log('Current viewers in the room ' + room_name + ' = ' + viewers);
+
+	io.to(room_name).emit('update viewers', viewers);
+}
+
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
@@ -24,14 +32,12 @@ io.on('connection', function(socket){
   // Register to feed
    socket.on('register viewer', function(msg){
     var obj = JSON.parse(msg);
-    socket.join(obj.id + "");
-    console.log('Viewer joined the romm ' + obj.id);
-  });
+    var room_name = obj.id + "";
+    socket.join(room_name);
+    console.log('Viewer joined the romm ' + room_name);
 
-  // socket.on('join', function(msg){
-  //   console.log('join room: ' + msg);
-  //   socket.join(msg);
-  // });
+    send_updated_viewers_count(io, room_name);
+  });
   
   socket.on('chat message', function(msg){
     console.log('message: ' + msg);
@@ -41,6 +47,8 @@ io.on('connection', function(socket){
 
   socket.on('disconnect', function(){
     console.log('user disconnected');
+
+    // Update viewer count
   });
 
   // get curators

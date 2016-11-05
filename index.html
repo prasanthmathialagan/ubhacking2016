@@ -23,10 +23,20 @@
   <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
   <script>
     var socket = io();
-    // socket.emit('join', '2');
     $('form').submit(function(){
-      socket.emit('chat message', $('#m').val());
+      var msg = $('#m').val();
+      if(msg === 'register curator'){
+        var obj = {};
+        obj['name'] = 'Prasanth';
+        obj['img'] = 'Testimage';
+        socket.emit('register curator', JSON.stringify(obj));
+      }
+      else {
+        socket.emit('chat message', msg);
+      }
+
       $('#m').val('');
+     
       return false;
     });
     socket.on('chat message', function(msg){
