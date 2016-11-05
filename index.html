@@ -25,11 +25,16 @@
     var socket = io();
     $('form').submit(function(){
       var msg = $('#m').val();
-      if(msg === 'register curator'){
+      if(msg == 1){
         var obj = {};
         obj['name'] = 'Prasanth';
         obj['img'] = 'Testimage';
         socket.emit('register curator', JSON.stringify(obj));
+      }
+      else if(msg >= 20 && msg < 30){
+        var obj = {};
+        obj['id'] = msg % 20;
+        socket.emit('register viewer', JSON.stringify(obj));
       }
       else {
         socket.emit('chat message', msg);
@@ -41,6 +46,9 @@
     });
     socket.on('chat message', function(msg){
       $('#messages').append($('<li>').text(msg));
+    });
+    socket.on('update viewers', function(msg){
+      $('#messages').append($('<li>').text('Current viewers = ' + msg));
     });
   </script>`
 </html>

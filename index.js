@@ -2,6 +2,7 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var curators = [];
+var curator_sockets = [];
 var id_counter = 0;
 
 var send_updated_viewers_count = function(io, room_name){
@@ -30,8 +31,18 @@ io.on('connection', function(socket){
     obj.id = id_counter;
     id_counter++;
 
-    socket.join(obj.id + "");
-    console.log('Curator with name = ' + obj.name + ', id = ' + obj.id + ' created a romm ' + obj.id);
+    var room_name = obj.id + "";
+    var room = io.sockets.in(room_name);
+    room.on('leave', function() {
+    	console.log('Leaving the room');
+    	send_updated_viewers_count(io, room_name);
+	});
+
+    socket.join(room_name);
+    console.log('Curator with name = ' + obj.name + ', id = ' + obj.id + ' created a room ' + obj.id);
+
+    curators.push(obj);
+    curator_sockets.push(socket);
   });
 
   // Register to feed
@@ -53,7 +64,12 @@ io.on('connection', function(socket){
   socket.on('disconnect', function(){
     console.log('user disconnected');
 
-    // Update viewer count
+    var i = curator_sockets.indexOf(socket);
+    if(i != -1){
+    	console.log("Removing the curator from the index " + i);
+    	curator_sockets.splice(i, 1);
+    	curators.splice(i, 1);
+    }
   });
 
 });
