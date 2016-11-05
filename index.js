@@ -16,6 +16,11 @@ app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
 
+app.get('/curators',function (req, res) {
+  res.write(JSON.stringify({"Curators":curators}));
+  res.end();
+});
+
 io.on('connection', function(socket){
   console.log('a user connected');
   
@@ -51,11 +56,6 @@ io.on('connection', function(socket){
     // Update viewer count
   });
 
-  // get curators
-  socket.on('get curators', function(){
-    console.log('get curators called');
-
-  });
 });
 
 http.listen(3000, function(){
