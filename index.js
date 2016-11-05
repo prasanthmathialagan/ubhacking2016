@@ -19,6 +19,9 @@ var send_updated_viewers_count = function(io, room_name){
 	io.to(room_name).emit('update viewers', viewers);
 }
 
+var express = require('express');
+app.use('/js', express.static(__dirname + '/js'));
+
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
 });
@@ -58,6 +61,9 @@ io.on('connection', function(socket){
   
   // Register viewer
   socket.on('register curator', function(msg){
+  	if(!can_register(socket))
+  		return;
+
     var obj = JSON.parse(msg);
     obj.id = id_counter;
     id_counter++;
@@ -74,6 +80,9 @@ io.on('connection', function(socket){
 
   // Register to feed
   socket.on('register viewer', function(msg){
+   	if(!can_register(socket))
+  		return;
+
     var obj = JSON.parse(msg);
     var room_name = obj.id + "";
     
