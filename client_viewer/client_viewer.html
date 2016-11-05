@@ -55,7 +55,7 @@
 	  loadUrl(url);
 	});
 
-	socket.emit('register viewer', $ROOM);
+	socket.emit('register viewer', '{"id":$ROOM}');
 
 </script>
 </html>
