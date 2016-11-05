@@ -28,11 +28,11 @@
 						|| document.body.clientHeight;
 
 		var frame = document.getElementById("video_frame");
-		frame.height = height - margin;
-		frame.width = width - margin;	
+		frame.height = 500;//height - margin;
+		frame.width = 500;//width - margin;	
 
 		// doesn't belong here
-		loadUrl('https://www.youtube.com/embed/e8FI120ItdU?autoplay=1');	
+		//loadUrl('https://www.youtube.com/embed/e8FI120ItdU?autoplay=1');	
 	}
 
 </script>
@@ -51,7 +51,11 @@
 	var socket = io();
 	
 	socket.on('publish video', function(url){
+		console.log("Video received");
 	  loadUrl(url);
 	});
-</script>`
+
+	socket.emit('register viewer', $ROOM);
+
+</script>
 </html>

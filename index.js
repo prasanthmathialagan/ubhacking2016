@@ -1,9 +1,13 @@
 var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
+var fs = require('fs');
+
 var curators = [];
 var curator_sockets = [];
 var id_counter = 0;
+
+const VIEWER_URL = __dirname + '/client_viewer/client_viewer.html';
 
 var send_updated_viewers_count = function(io, room_name){
   	var room = io.sockets.adapter.rooms[room_name];
@@ -22,6 +26,13 @@ app.get('/curators',function (req, res) {
   res.end();
 });
 
+app.get('/broadcast_channel/:id',function(req, res) {
+  var data = fs.readFileSync(VIEWER_URL, "utf8");
+  console.log(JSON.stringify(req.params) + "   " + req.params.id);
+  res.write(data.replace('$ROOM', req.params.id));
+  res.end();
+})
+
 io.on('connection', function(socket){
   console.log('a user connected');
   
@@ -36,7 +47,7 @@ io.on('connection', function(socket){
     room.on('leave', function() {
     	console.log('Leaving the room');
     	send_updated_viewers_count(io, room_name);
-	});
+	   });
 
     socket.join(room_name);
     console.log('Curator with name = ' + obj.name + ', id = ' + obj.id + ' created a room ' + obj.id);
@@ -46,7 +57,7 @@ io.on('connection', function(socket){
   });
 
   // Register to feed
-   socket.on('register viewer', function(msg){
+  socket.on('register viewer', function(msg){
     var obj = JSON.parse(msg);
     var room_name = obj.id + "";
     socket.join(room_name);
@@ -54,6 +65,12 @@ io.on('connection', function(socket){
 
     send_updated_viewers_count(io, room_name);
   });
+
+  /*socket.on('publish video', function(msg){
+    console.log('message: ' + msg);
+    socket.broadcast.emit('chat message', msg);
+    // io.to('1').emit('chat message', msg);
+  });*/
   
   socket.on('chat message', function(msg){
     console.log('message: ' + msg);
