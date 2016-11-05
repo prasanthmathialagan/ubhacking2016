@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Server View</title>
+
+        <script type="text/javascript">
+        	function getVideoTags(){
+        		return new Array("youtube","periscope","facebook");
+        	}
+        	function getUrls(){
+        		var urls = [];
+        		urls["youtube"] = new Array("https://www.youtube.com/embed/VsQeR1HlhHY");
+        		urls["periscope"] = ["https://www.periscope.tv/w/1BRKjAEVXQjxw"];
+        		urls["facebook"] = ["https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2FRTnews%2Fvideos%2F10154858714744411%2F&width=240&show_text=false&height=135&appId"];
+        		return urls;
+        	}
+
+        	function createIFrameTag(url, id){
+        		var ifrm = "<iframe src='"
+        		ifrm += url+"'";
+        		ifrm += 'width=320 '
+        		ifrm += ">URL Load</iframe>"
+
+        		var buttn = "<button type=button value='"+url+"'"
+        		buttn += "id="+id
+        		buttn += " onClick=selectVideo("+id+"); >Select Video</button>"
+        		var tab = "<table><tr><td>"
+        		
+        		tab += ifrm;
+        		tab += "</td></tr><tr><td>"
+        		tab += buttn
+        		tab += "</td></tr></table>"
+        		console.log(tab);
+        		return tab;
+        	}
+
+        	function selectVideo(id){
+        		var buttn = document.getElementById(id);
+        		var focusIFrame = document.getElementById("userFocus");
+        		console.log(buttn.value);
+        		focusIFrame.src = buttn.value;
+        	}
+
+        	function buildVideoFeed(){
+        		var table = document.getElementById("table1");
+        		var urls = getUrls()
+        		var tags = getVideoTags();
+        		for(i = 0; i < tags.length; i++){
+        			var tagurls = urls[tags[i]];
+        			var row = table.insertRow(-1);
+        			row.id = i;
+        			for(j = 0; j < tagurls.length; j++){
+        				var cell = row.insertCell(-1);
+        				var ifrm = createIFrameTag(tagurls[j],(i+1)+""+(j+1));
+        				cell.innerHTML = ifrm; 
+        			}
+        			
+        		}
+        	}
+
+        	function publishVideo(){
+        		var focusIFrame = document.getElementById("userFocus");
+        		var publishIFrame = document.getElementById("liveVideo");
+        		publishIFrame.src = focusIFrame.src;
+        	}
+
+        </script>
+    </head>
+    <body onload="buildVideoFeed()">
+        <table id="table1">
+        </table>
+        <table id="table2">
+        	<tr>
+        		<td>
+        		<iframe id="userFocus" src=""></iframe>
+        		</td>
+        		<td>
+        			<iframe id="liveVideo" src="" ></iframe>			
+        		</td>
+        	</tr>
+        	<tr><td>
+        	<button type=button onClick="publishVideo();"> Publish Video</button>
+        	</td></tr>
+        </table>  
+    </body>
+</html>
