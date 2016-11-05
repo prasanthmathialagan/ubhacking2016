@@ -12,7 +12,7 @@
 </style>
 
 <script type="text/javascript">
-	function onReceiveUrl(url) {
+	function loadUrl(url) {
     	document.getElementById("video_frame").src=url;
 	}
 
@@ -32,7 +32,7 @@
 		frame.width = width - margin;	
 
 		// doesn't belong here
-		onReceiveUrl('https://www.youtube.com/embed/e8FI120ItdU?autoplay=1');	
+		loadUrl('https://www.youtube.com/embed/e8FI120ItdU?autoplay=1');	
 	}
 
 </script>
@@ -44,4 +44,14 @@
 </section>
 
 </body>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+	var socket = io();
+	
+	socket.on('publish video', function(url){
+	  loadUrl(url);
+	});
+</script>`
 </html>
