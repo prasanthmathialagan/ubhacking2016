@@ -49,13 +49,14 @@
 <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
 	var socket = io();
+	var room = $ROOM;
 	
 	socket.on('publish video', function(url){
 		console.log("Video received");
 	  loadUrl(url);
 	});
 
-	socket.emit('register viewer', '{"id":$ROOM}');
+	socket.emit('register viewer', '{"id":' + room + '}');
 
 </script>
 </html>
