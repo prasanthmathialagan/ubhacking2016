@@ -7,8 +7,22 @@
         position: absolute;
         top: 50%;
         left: 50%;
-        margin-right: -50%;
+        /*margin-right: 0%;*/
         transform: translate(-50%, -50%) }
+        .headfoot {
+        	padding-left: 15px;
+        	padding-right: 15px;
+        	padding-top: 30px;
+        	
+        	color:rgb(255, 255, 255);
+        	font-family:Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+        }
+        .headtext{
+        	font-size:21px;
+        	font-weight:700;
+        	height:50px;
+        	line-height:20px;
+        }
 </style>
 
 <script type="text/javascript">
@@ -37,14 +51,26 @@
 
 </script>
 
-<body onload="initializeIFrame()">
+<body onload="initializeIFrame()" style="margin:0px;background-color: rgb(24, 188, 156);">
 
+<header style='background-color:rgb(44, 62, 80);margin:0pt;'>
+<div class="headfoot headtext">
+<span id="room_title">Broadcaster</span>'s feed
+</div>
+</header>
+<article >
+<div  style="background-color:rgb(44, 62, 80);border-left: 10px;border-bottom: 0px;border-top: 10px;border-right: 10px; border-style: solid;border-color: #FFFFFF">
 <section>
-	<iframe id="video_frame" scrolling="no" frameborder="0" style="border: 0px none transparent"></iframe>
+	<iframe id="video_frame" scrolling="no" frameborder="25" style="border: 0px solid #FFFFFF"></iframe>
 </section>
-
+</div>
+</article>
+<footer style="background-color:rgb(44, 62, 80);margin:0pt;height:50pt;position:absolute;left:0;bottom:0;overflow:hidden;width:100%">
+<div class="headfoot">
+Live Video Jockey
+</div>
+</footer>
 	<div id="userscount"></div>
-
 </body>
 
 <script src="/socket.io/socket.io.js"></script>
@@ -57,6 +83,8 @@
 	var name = urlParams.get('room');
 	var obj = {};
     obj['name'] = name;
+
+    $('#room_title').html(name);
     
     socket.emit('register viewer', JSON.stringify(obj));
 	
@@ -76,3 +104,4 @@
 	})
 </script>
 </html>
+	
