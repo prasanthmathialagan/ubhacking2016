@@ -49,14 +49,18 @@
 <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
 	var socket = io();
-	var room = $ROOM;
+	var urlParams = new URLSearchParams(window.location.search);
+	var name = urlParams.get('room');
+	var obj = {};
+    obj['name'] = name;
+    
+    socket.emit('register viewer', JSON.stringify(obj));
 	
 	socket.on('publish video', function(url){
 		console.log("Video received");
-	  loadUrl(url);
+	  	loadUrl(url);
 	});
 
-	socket.emit('register viewer', '{"id":' + room + '}');
-
+	loadUrl('https://www.periscope.tv/w/1BRKjAEVXQjxw');
 </script>
 </html>
