@@ -19,10 +19,12 @@ var client = new Twitter({
 	
 var send_updated_viewers_count = function(io, room_name){
 	console.log('Updating viewers count in the room ' + room_name);
-  	var room = io.sockets.adapter.rooms[room_name];
-	var viewers = room.length - 1;
+  var room = io.sockets.adapter.rooms[room_name];
+  var viewers = 1;
+  if(room != null){
+    viewers = room.length - 1;
+  }
 	console.log('Current viewers in the room ' + room_name + ' = ' + viewers);
-
 	io.to(room_name).emit('update viewers', viewers);
 }
 
@@ -51,11 +53,11 @@ app.get('/curators',function (req, res) {
 });
 
 app.get('/gettweets/:query',function(req,res){
-  client.get('search/tweets', {q: req.params.query, count:100, result_type: "recent"}, function(error, tweets, response) {
+  client.get('search/tweets', {q: req.params.query, count:40, result_type: "recent"}, function(error, tweets, response) {
     var obj = JSON.parse(JSON.stringify(tweets));
     var result = [];
     var statuses = obj["statuses"];
-    var curDate = new Date().getTime() - (60 * 60000);
+    var curDate = new Date().getTime() - (30 * 60000);
   //  console.log("count: " + statuses.length +" ,curDate: " + curDate);
     for (i=0;i< statuses.length;i++)
     {

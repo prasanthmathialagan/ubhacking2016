@@ -130,15 +130,37 @@ table {
         var items = data["items"];
         for(i=0; i<items.length;i++){
             var id = items[i]["id"];
-            urls.push("https://www.youtube.com/embed/"+id["videoId"]+"?autoplay=1&showinfo=0&controls=0&loop=1&enablejsapi=1");
+            urls.push("https://www.youtube.com/embed/"+id["videoId"]+"?autoplay=1&showinfo=1&controls=1&enablejsapi=1");
         }
         updateRow(urls,"youtube");
     }
     );  
     }  
 
+    var player;
+
+    function onYouTubeIframeAPIReady() {
+      player = new YT.Player('YoutubePlayer', {
+        events: {
+          'onStateChange': onPlayerStateChange
+        }
+      });
+    }
+
+    function onPlayerStateChange() {
+        console.log("in function");
+        if(player != null){
+            player.mute();
+            console.log("ismuted: " + player.isMuted());
+            // player.setVolume(0);
+        }
+    }
+
     function updateRow(urls, id){
         var row = document.getElementById(id);
+        if(row == null){
+            return;
+        }
         var rowLength = row.cells.length;
         for(var i = 0; i < rowLength; i++) {
             row.deleteCell(0);
@@ -170,11 +192,11 @@ table {
 	function createIFrameTag(url, id){
         var ifrm = "<iframe src='"
 		ifrm += url+"'";
-		ifrm += 'width=220  height=220 frameborder=0'
-        if(id.indexOf("periscope") >= 0){
-         ifrm += "style=\"-webkit-transform:scale(0.3,0.3);-moz-transform-scale(0.3,0.3);\" "   
+		ifrm += 'width=220  height=220 frameborder=0 '
+        if(id.indexOf("youtube") >= 0){
+            ifrm += " id=YoutubePlayer "
         }
-		ifrm += ">URL Load</iframe>"
+        ifrm += ">URL Load</iframe>"
 		var buttn = "<button class=button type=button value='"+url+"'"
 		buttn += "id="+id
 		buttn += " onClick=selectVideo('"+id+"'); ><span>Select<span></button>"
@@ -218,7 +240,7 @@ table {
     function updateVideos(keyword) {
         updateYoutubeVideos(keyword);
         updatePeriscopeVideos(keyword);
-        updateFacebookVideos(keyword);
+        // updateFacebookVideos(keyword);
     }
 
     </script>
