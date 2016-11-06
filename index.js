@@ -21,9 +21,12 @@ var send_updated_viewers_count = function(io, room_name){
 
 var express = require('express');
 app.use('/js', express.static(__dirname + '/js'));
-
+app.use('/css', express.static(__dirname + '/css'));
+app.use('/fonts', express.static(__dirname + '/fonts'));
+app.use('/img', express.static(__dirname + '/img'));
+app.use('/font-awesome', express.static(__dirname + '/font-awesome'));
 app.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
+  res.sendFile(__dirname + '/main.html');
 });
 
 app.get('/curators',function (req, res) {
