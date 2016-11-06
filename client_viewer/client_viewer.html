@@ -43,11 +43,15 @@
 	<iframe id="video_frame" scrolling="no" frameborder="0" style="border: 0px none transparent"></iframe>
 </section>
 
+	<div id="userscount"></div>
+
 </body>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 <script>
+	loadUrl("/viewer/novideofound.html");
+
 	var socket = io();
 	var urlParams = new URLSearchParams(window.location.search);
 	var name = urlParams.get('room');
@@ -57,10 +61,18 @@
     socket.emit('register viewer', JSON.stringify(obj));
 	
 	socket.on('publish video', function(url){
-		console.log("Video received");
+		console.log("Video URL received = " + url);
 	  	loadUrl(url);
 	});
 
-	loadUrl('https://www.periscope.tv/w/1BRKjAEVXQjxw');
+	socket.on('initial video', function(url){
+		console.log("Initial Video URL received = " + url);
+	  	loadUrl(url);
+	});
+
+	socket.on('update viewers', function(viewers){
+		console.log("Viewers count = " + viewers);
+		$("#userscount").text("Viewers count = " + viewers);
+	})
 </script>
 </html>
