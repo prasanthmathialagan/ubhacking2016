@@ -8,6 +8,7 @@ var curators = [];
 var curator_sockets = [];
 var sockets_to_rooms = new Map();
 var rooms_to_latest_video = new Map();
+var rooms_to_emojis_count = new Map();
 
 var client = new Twitter({
    consumer_key: 'rnkH5fxqVdwevxOFj63lPUIjX',
@@ -136,6 +137,20 @@ io.on('connection', function(socket){
    		var initial_video = rooms_to_latest_video.get(room_name);
    		console.log("Current video in the room = " + initial_video);
    		socket.emit('initial video', initial_video);
+
+   		var emojis_count = rooms_to_emojis_count.get(room_name);
+   		if(emojis_count){
+   			
+   		}
+   		else {
+   			emojis_count = new Object();
+    		for (var i = 0; i < 4; i++) {
+    			emojis_count[i] = 0;
+    		}
+    		rooms_to_emojis_count.set(room_name, emojis_count);
+   		}
+
+   		io.to(room_name).emit('emotion count', JSON.stringify(emojis_count));
    	}
    	else {
    		console.log("There is no video running in the room");
@@ -160,6 +175,26 @@ io.on('connection', function(socket){
     console.log('message: ' + msg);
     socket.broadcast.emit('chat message', msg);
     // io.to('1').emit('chat message', msg);
+  });
+
+  socket.on('emotion added', function(msg){
+    console.log('Emotion added = ' + msg);
+    var room_name = sockets_to_rooms.get(socket);
+    var emojis_count = rooms_to_emojis_count.get(room_name);
+    if(emojis_count){
+    		emojis_count[msg] = emojis_count[msg] + 1;
+    }
+    else {
+    	emojis_count = new Object();
+    	for (var i = 0; i < 4; i++) {
+    		emojis_count[i] = 0;
+    	}
+    	emojis_count[msg] = 1;
+    	rooms_to_emojis_count.set(room_name, emojis_count);
+    }
+
+    io.to(room_name).emit('emotion slider', msg);
+    io.to(room_name).emit('emotion count', JSON.stringify(emojis_count));
   });
 
   socket.on('disconnect', function(){

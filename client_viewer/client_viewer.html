@@ -89,33 +89,28 @@
 		emotionImage.style.width = '20px';
 		if(emotionType == 0) {
 			emotionImage.className = "em em---1";
-			var thumbsUpCount = document.getElementById("thumbsUpCount");
-			var thumbsUpCountVal = parseInt(thumbsUpCount.value);
-			thumbsUpCount.value = thumbsUpCountVal + 1;
 		}
 		else if(emotionType == 1) {
 			emotionImage.className = "em em--1";
-			var thumbsDownCount = document.getElementById("thumbsDownCount");
-			var thumbsDownCountVal = parseInt(thumbsDownCount.value);
-			thumbsDownCount.value = thumbsDownCountVal + 1;
-
 		}
 		else if(emotionType == 2) {
 			emotionImage.className = "em em-laughing";
-			var laughingCount = document.getElementById("laughingCount");
-			var laughingCountVal = parseInt(laughingCount.value);
-			laughingCount.value = laughingCountVal + 1;
-
-		var laughingCount = document.getElementById("laughingCount");
 		}
 		else if(emotionType == 3) {
 			emotionImage.className = "em em-anguished";
-			var anguishedCount = document.getElementById("anguishedCount");
-			var anguishedCountVal = parseInt(anguishedCount.value);
-			anguishedCount.value = anguishedCountVal + 1;
 		}
+
 		emotionList.insertBefore(emotionImage, emotionList.firstChild);
 	}
+
+	function updateEmotionsCount(emotionscount) {
+		for (var i = 0; i < 4; i++) {
+			var label = '#emotion_' + i + '_count';
+			var count = emotionscount[i];
+			$(label).text(count);
+		}
+	}
+
 
 </script>
 
@@ -134,19 +129,23 @@
 	<iframe id="video_frame" scrolling="no" frameborder="0" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);" align="middle"></iframe>
 	</div>
 	<div style="width: 100%;height: 10%">
-	EMOTICON FEED!!
+	<div>
+		<i class="em em---1" id="emotion_0" onclick="emoji_clicked(0)"></i>
+		<label id="emotion_0_count"></label>
+		<i class="em em--1" id="emotion_1" onclick="emoji_clicked(1)"></i>
+		<label id="emotion_1_count"></label>
+		<i class="em em-laughing" id="emotion_2" onclick="emoji_clicked(2)"></i>
+		<label id="emotion_2_count"></label>
+		<i class="em em-anguished" id="emotion_3" onclick="emoji_clicked(3)"></i>
+		<label id="emotion_3_count"></label>
+	</div>
+	<span id="emotionSlider"></span>
 	</div>
 </div>
 <div style="float:left; width:30%;">
 
-  <!-- This div contains all comments -->
-
 <!-- These contain the number of emotions received-->
 <input id="emotionCount" type="hidden" value="0">
-<input id="thumbsUpCount" type="hidden" value="0">
-<input id="thumbsDownCount" type="hidden" value="0">
-<input id="laughingCount" type="hidden" value="0">
-<input id="anguishedCount" type="hidden" value="0">
 
 </div>
 
@@ -190,6 +189,23 @@ Live Video Jockey
 		console.log("Viewers count " + viewers);
 		$("#userscount").text("Viewers count: " + viewers);
 	})
+
+	socket.on('emotion slider', function(emotion){
+		console.log("Emotion slider = " + emotion);
+		// emotion slider
+		onEmotionReceived(emotion);
+	});
+
+	socket.on('emotion count', function(msg){
+		console.log("Emotion count = " + msg);
+		// emotion count
+		updateEmotionsCount(JSON.parse(msg));
+	});
+
+	function emoji_clicked(id) {
+		console.log("Emoji clicked = " + id);
+		socket.emit("emotion added", id);
+	}
 </script>
 </html>
 	
