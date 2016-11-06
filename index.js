@@ -5,7 +5,6 @@ var fs = require('fs');
 
 var curators = [];
 var curator_sockets = [];
-var id_counter = 0;
 var sockets_to_rooms = new Map();
 
 const VIEWER_URL = __dirname + '/client_viewer/client_viewer.html';
@@ -25,8 +24,13 @@ app.use('/css', express.static(__dirname + '/css'));
 app.use('/fonts', express.static(__dirname + '/fonts'));
 app.use('/img', express.static(__dirname + '/img'));
 app.use('/font-awesome', express.static(__dirname + '/font-awesome'));
+
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/main.html');
+});
+
+app.get('/curatorpage', function(req, res){
+  res.sendFile(__dirname + '/clientMixer/index.html');
 });
 
 app.get('/curators',function (req, res) {
@@ -48,7 +52,7 @@ var update_sockets_map = function(socket, room_name){
 
 var can_register = function(socket){
 	if(sockets_to_rooms.has(socket)){
-  		if(curator_sockets.indexOf(socket) != 1) {
+  		if(curator_sockets.indexOf(socket) != -1) {
   			console.error('Already registered as a curator!!!!');
   		}
   		else {
@@ -68,14 +72,9 @@ io.on('connection', function(socket){
   		return;
 
     var obj = JSON.parse(msg);
-    obj.id = id_counter;
-    id_counter++;
-
-    var room_name = obj.id + "";
-
+    var room_name = obj.name;
     update_sockets_map(socket, room_name);
-
-    console.log('Curator with name = ' + obj.name + ', id = ' + obj.id + ' created a room ' + obj.id);
+    console.log('Curator with name = ' + obj.name + ' created a room ' + room_name);
 
     curators.push(obj);
     curator_sockets.push(socket);
@@ -87,7 +86,7 @@ io.on('connection', function(socket){
   		return;
 
     var obj = JSON.parse(msg);
-    var room_name = obj.id + "";
+    var room_name = obj.name;
     
     update_sockets_map(socket, room_name);
     console.log('Viewer joined the room ' + room_name);
@@ -95,11 +94,11 @@ io.on('connection', function(socket){
     send_updated_viewers_count(io, room_name);
   });
 
-  /*socket.on('publish video', function(msg){
-    console.log('message: ' + msg);
-    socket.broadcast.emit('chat message', msg);
-    // io.to('1').emit('chat message', msg);
-  });*/
+  socket.on('publish video', function(msg){
+    console.log('Video to be published : ' + msg);
+    var room_name = sockets_to_rooms.get(socket);
+    io.to(room_name).emit('publish video', room_name);
+  });
   
   socket.on('chat message', function(msg){
     console.log('message: ' + msg);

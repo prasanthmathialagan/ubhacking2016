@@ -85,10 +85,12 @@
     $('#curator').click(function(){
       //var msg =1;
      
-        var obj = {};
-        obj['name'] = $('#name').val();
-        obj['img'] = 'Testimage';
-        socket.emit('register curator', JSON.stringify(obj));
+        // var obj = {};
+        // obj['name'] = $('#name').val();
+        // obj['img'] = 'Testimage';
+        // socket.emit('register curator', JSON.stringify(obj));
+
+        window.location.href = "/curatorpage?name=" + $('#name').val();
       });
 
     /* $('#viewer').click(function(){
