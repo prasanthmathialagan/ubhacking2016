@@ -43,7 +43,7 @@
             row.deleteCell(0);
         }
 
-        for(var i = 0; i < urls.length; i++){
+        for(var i = 0; i < Math.min(urls.length,5); i++){
             var cell = row.insertCell(-1);
             var ifrm = createIFrameTag(urls[i],id+""+(i+1));
             cell.innerHTML = ifrm;                
@@ -51,7 +51,7 @@
     }
     
     function updatePeriscopeVideos(keyword){
-        var url = "http://localhost:3000/gettweets/%23periscope%20"+keyword;
+        var url = "http://localhost:3000/gettweets/%23periscope";
         $.get(
             url,
             {},
@@ -69,7 +69,10 @@
 	function createIFrameTag(url, id){
         var ifrm = "<iframe src='"
 		ifrm += url+"'";
-		ifrm += 'width=320 '
+		ifrm += 'width=320  height=320'
+        if(id.indexOf("periscope") >= 0){
+         ifrm += "style=\"-webkit-transform:scale(0.3,0.3);-moz-transform-scale(0.3,0.3);\" "   
+        }
 		ifrm += ">URL Load</iframe>"
 		var buttn = "<button type=button value='"+url+"'"
 		buttn += "id="+id
@@ -108,7 +111,7 @@
     
 
     </head>
-    <body class="container">
+    <body class="container" onload="updateVideos('cat')">
     
     <div class="searchArea" align="center" style="margin: 20px">
     <input id="keyword" type="text">
@@ -127,10 +130,10 @@
         <table class="table" id="table2">
         	<tr>
         		<td>
-        		<iframe id="userFocus" src=""></iframe>
+        		<iframe id="userFocus" width="480" height="480" src=""></iframe>
         		</td>
         		<td>
-        		<iframe id="liveVideo" src="" ></iframe>			
+        		<iframe id="liveVideo" width="480" height="480" src="" ></iframe>			
         		</td>
         	</tr>
         	<tr><td>
