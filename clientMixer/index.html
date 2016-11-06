@@ -26,8 +26,9 @@
     font-size: 17px;
     color: #FFFFFF;
     padding: 2px;
-    width: 200px;
-    margin-left:10px;
+    width: 180px;
+    margin-left:20px;
+    margin-right:20px;
     text-align: center;
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
@@ -56,7 +57,7 @@
     transition: 0s
 }
     div.polaroid {
-      width: 50%;
+      width: 440px;
       background-color: white;
       box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
       margin-bottom: 25px;
@@ -104,7 +105,19 @@
         width: 48%;
        
     }   
+    ::-webkit-scrollbar{
+        width: 3px;
+        height: 3px;
+    };
 
+td { 
+    padding: 10px;
+}
+
+table { 
+    border-spacing: 5px;
+    border-collapse: separate;
+}
     </style>
     <script type="text/javascript">
 
@@ -117,7 +130,7 @@
         var items = data["items"];
         for(i=0; i<items.length;i++){
             var id = items[i]["id"];
-            urls.push("https://www.youtube.com/embed/"+id["videoId"]+"?autoplay=1");
+            urls.push("https://www.youtube.com/embed/"+id["videoId"]+"?autoplay=1&showinfo=0&controls=0&loop=1&enablejsapi=1");
         }
         updateRow(urls,"youtube");
     }
@@ -139,7 +152,7 @@
     }
     
     function updatePeriscopeVideos(keyword){
-        var url = "http://localhost:3000/gettweets/%23periscope";
+        var url = "http://localhost:3000/gettweets/%23periscope%20"+keyword;
         $.get(
             url,
             {},
@@ -213,7 +226,7 @@
 
     </head>
 
-    <body style="margin:0px;background-color: rgb(24, 188, 156);" onload="updateVideos('cat')">
+    <body style="margin:0px;background-color: rgb(255, 255, 255);" onload="updateVideos('cat')">
     <header style='background-color:rgb(44, 62, 80);margin:0pt;height:100px'>
     <div class="headfoot headtext">
         <span id="room_title">Curator</span>'s feed
@@ -249,7 +262,7 @@
              <p id="postsel" hidden style="float:left;">Your Selection</p>
              </div>
               <div >
-              <button hidden class=button style="margin-left:5%;margin-bottom:5%;background-color:#FF0000" id="publish" type=button onClick="publishVideo();">Publish Video</button>
+              <button hidden class=button style="margin-left:5%;margin-bottom:5%;background-color:#FF0000" id="publish" type=button onClick="publishVideo();"><h4>Publish Video</h4></button>
               </div>
             </div>
            
