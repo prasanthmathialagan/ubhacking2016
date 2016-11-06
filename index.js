@@ -33,17 +33,14 @@ app.get('/curatorpage', function(req, res){
   res.sendFile(__dirname + '/clientMixer/index.html');
 });
 
+app.get('/viewerpage', function(req, res){
+  res.sendFile(__dirname + '/client_viewer/client_viewer.html');
+});
+
 app.get('/curators',function (req, res) {
   res.write(JSON.stringify({"Curators":curators}));
   res.end();
 });
-
-app.get('/broadcast_channel/:id',function(req, res) {
-  var data = fs.readFileSync(VIEWER_URL, "utf8");
-  console.log(JSON.stringify(req.params) + "   " + req.params.id);
-  res.write(data.replace('$ROOM', req.params.id));
-  res.end();
-})
 
 var update_sockets_map = function(socket, room_name){
 	socket.join(room_name);
@@ -97,7 +94,7 @@ io.on('connection', function(socket){
   socket.on('publish video', function(msg){
     console.log('Video to be published : ' + msg);
     var room_name = sockets_to_rooms.get(socket);
-    io.to(room_name).emit('publish video', room_name);
+    io.to(room_name).emit('publish video', msg);
   });
   
   socket.on('chat message', function(msg){
