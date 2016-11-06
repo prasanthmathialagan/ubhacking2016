@@ -122,7 +122,7 @@
 
 	function onCommentReceived(msg) {
 		console.log('onCommentReceived called');
-		$('#messages').append($('<li>').text(msg));
+		$('#messages').append($('<div class="Rounded regFont" style="color:#000000;border-radius:10px;background-color:#DDDDDD;">').text(msg));
 		// var chatbox = document.getElementById("chatbox");
 		// var comment = document.createElement("label");
 		// comment.text = msg;
@@ -171,17 +171,21 @@
 </div>
 
 <div style="float:left; width:30%;">
-
-<!-- These contain the number of emotions received-->
-	<div id="chatbox">
+	<div style="vertical-align: bottom;">	
+     <form name="commentform" action="" >
+        <input name="usermsg" type="text" id="usermsg" style="width:100%;" />
+        <input name="comment" type="submit" style="width:100%;" id="comment" value="Send" />
+    </form>
+    </div>
+    <!-- These contain the number of emotions received-->
+	<div id="chatbox" >
 		<ul id="messages"></ul>
     </div>
 
-     <form name="commentform" action="">
-        <input name="usermsg" type="text" id="usermsg" size="63" />
-        <input name="comment" type="submit"  id="comment" value="Send" />
-    </form>
 </div>
+
+
+
 
 <input id="emotionCount" type="hidden" value="0">
 
