@@ -2,13 +2,16 @@
 <style>
     body {
         background: white }
-    section {
-        color: white;
-        position: absolute;
+    .frame {
+        	margin:0px;
+        width:500px;
+        height:400px;
+        background-color:#c79202;	
+        /*position: absolute;
         top: 50%;
-        left: 50%;
-        /*margin-right: 0%;*/
-        transform: translate(-50%, -50%) }
+        left: 50%;*/
+        /*margin-right: 0%;
+        transform: translate(-50%, -50%)*/ }
         .headfoot {
         	padding-left: 15px;
         	padding-right: 15px;
@@ -18,11 +21,28 @@
         	font-family:Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
         }
         .headtext{
-        	font-size:21px;
+        	font-size:32px;
         	font-weight:700;
         	height:50px;
         	line-height:20px;
         }
+        .regFont{
+        color:rgb(255, 255, 255);
+        	font-family:Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+        }
+        .Rounded {
+         // rounds corners for firefox
+        border-bottom-left-radius:10px;
+        border-bottom-right-radius : 10px; //rounds corners for other browsers
+        border:solid 10px #000;
+        margin-top: 5px;
+        background-color:rgb(44, 62, 80);
+        padding:15px;
+    	}
+    	#userscount{
+    		font-weight:600;
+    		font-size:19px;
+    	}
 </style>
 
 <script type="text/javascript">
@@ -58,19 +78,26 @@
 <span id="room_title">Broadcaster</span>'s feed
 </div>
 </header>
-<article >
-<div  style="background-color:rgb(44, 62, 80);border-left: 10px;border-bottom: 0px;border-top: 10px;border-right: 10px; border-style: solid;border-color: #FFFFFF">
-<section>
-	<iframe id="video_frame" scrolling="no" frameborder="25" style="border: 0px solid #FFFFFF"></iframe>
-</section>
+
+<div style="float:left; width:30%;">
+<span id="userscount" class="Rounded regFont"></span>
 </div>
-</article>
+<div class="frame" style="width:40%;height:100%;float:left;text-align: center; display: inline-block;"> <!-- Main Div -->
+	<iframe id="video_frame" scrolling="no" frameborder="0" style="position: absolute;top: 50%;left: 50%;transform: translate(-50%, -50%);" align="middle"></iframe>
+</div>
+<div style="float:left; width:30%;">
+  <!-- Set Div As your requirement -->
+</div>
+
+<!-- "border-left: 10px;border-bottom: 10px;border-top: 10px;border-right: 10px; border-style: solid;border-color:rgb(44, 62, 80);" -->
+
+
 <footer style="background-color:rgb(44, 62, 80);margin:0pt;height:50pt;position:absolute;left:0;bottom:0;overflow:hidden;width:100%">
 <div class="headfoot">
 Live Video Jockey
 </div>
 </footer>
-	<div id="userscount"></div>
+	
 </body>
 
 <script src="/socket.io/socket.io.js"></script>
@@ -99,7 +126,7 @@ Live Video Jockey
 	});
 
 	socket.on('update viewers', function(viewers){
-		console.log("Viewers count = " + viewers);
+		console.log("Viewers count " + viewers);
 		$("#userscount").text("Viewers count = " + viewers);
 	})
 </script>
