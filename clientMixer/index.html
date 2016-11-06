@@ -3,72 +3,111 @@
     <head>
         <meta charset="utf-8">
         <title>Server View</title>
-
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script type="text/javascript">
-        	function getVideoTags(){
-        		return new Array("youtube","periscope","facebook");
-        	}
-        	function getUrls(){
-        		var urls = [];
-        		urls["youtube"] = new Array("https://www.youtube.com/embed/VsQeR1HlhHY");
-        		urls["periscope"] = ["https://www.periscope.tv/w/1BRKjAEVXQjxw"];
-        		urls["facebook"] = ["https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2FRTnews%2Fvideos%2F10154858714744411%2F&width=240&show_text=false&height=135&appId"];
-        		return urls;
-        	}
 
-        	function createIFrameTag(url, id){
-        		var ifrm = "<iframe src='"
-        		ifrm += url+"'";
-        		ifrm += 'width=320 '
-        		ifrm += ">URL Load</iframe>"
+        function getSessionCookie(){
 
-        		var buttn = "<button type=button value='"+url+"'"
-        		buttn += "id="+id
-        		buttn += " onClick=selectVideo("+id+"); >Select Video</button>"
-        		var tab = "<table><tr><td>"
-        		
-        		tab += ifrm;
-        		tab += "</td></tr><tr><td>"
-        		tab += buttn
-        		tab += "</td></tr></table>"
-        		console.log(tab);
-        		return tab;
-        	}
+            var url = "https://api.periscope.tv/api/v2/loginTwitter";
+            var data = []
+            data["user_id"] = 3299764856;
+            data["session_key"] = "rnkH5fxqVdwevxOFj63lPUIjX";
+            data["session_secret"] = "zXmUisyQicPgJ85WhQwh3Q3LBQi7zp1nK7C18xgt2suGPIvicK";
 
-        	function selectVideo(id){
-        		var buttn = document.getElementById(id);
-        		var focusIFrame = document.getElementById("userFocus");
-        		console.log(buttn.value);
-        		focusIFrame.src = buttn.value;
-        	}
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", url, true);
+            // xhr.setRequestHeader("Content-Type","application/json");
+            xhr.send(data);
+            xhr.onreadystatechange = function (){
+                console.log(xhr.ResponseText)
+                if(xhr.readyState == 4 && status == 200){
+                    var cookie = JSON.parse(xhr.ResponseText)['cookie'];
+                    alert(cookie);
+                    return cookie;
+                }else{
+                    alert("Twitter login error");
+                }
+            }
+        }
 
-        	function buildVideoFeed(){
-        		var table = document.getElementById("table1");
-        		var urls = getUrls()
-        		var tags = getVideoTags();
-        		for(i = 0; i < tags.length; i++){
-        			var tagurls = urls[tags[i]];
-        			var row = table.insertRow(-1);
-        			row.id = i;
-        			for(j = 0; j < tagurls.length; j++){
-        				var cell = row.insertCell(-1);
-        				var ifrm = createIFrameTag(tagurls[j],(i+1)+""+(j+1));
-        				cell.innerHTML = ifrm; 
-        			}
-        			
-        		}
-        	}
+        function loadYoutubeVideos(keyword){
+        $.get(
+        "https://www.googleapis.com/youtube/v3/search?q="+keyword+"&part=id&eventType=live&type=video&videoEmbeddable=true&videoSyndicated=true&maxResults=25&key=AIzaSyCVzkiLvCg-oK2aK-ZSiF7xJaXkeHXaAek",
+        {},
+        function(data) {
+            var urls = [];
+            var items = data["items"];
+            for(i=0; i<items.length;i++){
+                var id = items[i]["id"];
+                urls.push("https://www.youtube.com/embed/"+id["videoId"]);
+            }
+            console.log(urls);  
+            loadRow(urls,"youtube");
+        }
+        );  
+        }  
 
-        	function publishVideo(){
-        		var focusIFrame = document.getElementById("userFocus");
-        		var publishIFrame = document.getElementById("liveVideo");
-        		publishIFrame.src = focusIFrame.src;
-        	}
+        function loadRow(urls, id){
+            var row = document.getElementById(id);
+            for(i = 0; i < urls.length; i++){
+                var cell = row.insertCell(-1);
+                var ifrm = createIFrameTag(urls[i],id+""+(i+1));
+                cell.innerHTML = ifrm;                
+            }
+        }
+        
+        function loadPeriscopeVideos(keyword){
+            loadRow(["https://www.periscope.tv/w/1BRKjAEVXQjxw"],"periscope");
+        }
+
+        function loadFacebookVideos(keyword){
+            loadRow(["https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2FRTnews%2Fvideos%2F10154858714744411%2F&width=240&show_text=false&height=135&appId"],"facebook");
+        }        
+    	function createIFrameTag(url, id){
+    		var ifrm = "<iframe src='"
+    		ifrm += url+"'";
+    		ifrm += 'width=320 '
+    		ifrm += ">URL Load</iframe>"
+
+    		var buttn = "<button type=button value='"+url+"'"
+    		buttn += "id="+id
+    		buttn += " onClick=selectVideo("+id+"); >Select Video</button>"
+    		var tab = "<table><tr><td>"
+    		
+    		tab += ifrm;
+    		tab += "</td></tr><tr><td>"
+    		tab += buttn
+    		tab += "</td></tr></table>"
+    		console.log(tab);
+    		return tab;
+    	}
+
+    	function selectVideo(id){
+    		var buttn = document.getElementById(id);
+    		var focusIFrame = document.getElementById("userFocus");
+    		console.log(buttn.value);
+    		focusIFrame.src = buttn.value;
+    	}
+
+    	function buildVideoFeed(){
+    		loadYoutubeVideos("cats");
+    		loadPeriscopeVideos("cats");
+            loadFacebookVideos("cats");
+    	}
+
+    	function publishVideo(){
+    		var focusIFrame = document.getElementById("userFocus");
+    		var publishIFrame = document.getElementById("liveVideo");
+    		publishIFrame.src = focusIFrame.src;
+    	}
 
         </script>
     </head>
     <body onload="buildVideoFeed()">
         <table id="table1">
+        <tr id="youtube"></tr>
+        <tr id="facebook"></tr>
+        <tr id="periscope"></tr>
         </table>
         <table id="table2">
         	<tr>
