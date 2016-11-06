@@ -2,12 +2,19 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 var fs = require('fs');
+var Twitter = require('twitter');
 
 var curators = [];
 var curator_sockets = [];
 var sockets_to_rooms = new Map();
 
 const VIEWER_URL = __dirname + '/client_viewer/client_viewer.html';
+var client = new Twitter({
+   consumer_key: 'rnkH5fxqVdwevxOFj63lPUIjX',
+   consumer_secret: 'zXmUisyQicPgJ85WhQwh3Q3LBQi7zp1nK7C18xgt2suGPIvicK',
+   access_token_key: '3299764856-L9RuDmOX4LHUqmkLotuC8lXkfyBNxvy7bnRJIYC',
+   access_token_secret: 'ufEW8qeafQSQrmAQWEtFh42vfnkR7YV7tda5m1kB3QGZG'
+ });
 
 var send_updated_viewers_count = function(io, room_name){
 	console.log('Updating viewers count in the room ' + room_name);
@@ -40,6 +47,26 @@ app.get('/viewerpage', function(req, res){
 app.get('/curators',function (req, res) {
   res.write(JSON.stringify({"Curators":curators}));
   res.end();
+});
+
+app.get('/gettweets/:query',function(req,res){
+  client.get('search/tweets', {q: req.params.query}, function(error, tweets, response) {
+   // console.log(JSON.stringify(tweets));
+   // var obj = JSON.parse(tweets);
+    //var result={};
+    //var i=0;
+   /* for (i=0;i< obj.length;i++)
+    {
+       if (obj[i].hasOwnProperty(expanded_url))
+       {
+          result.push(obj[i].expanded_url);
+       }
+     }*/
+    // console.log(obj['statuses'].expanded_url);
+     res.write(JSON.stringify(tweets));
+     res.end();
+   
+  });
 });
 
 var update_sockets_map = function(socket, room_name){
