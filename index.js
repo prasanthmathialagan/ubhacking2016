@@ -50,20 +50,35 @@ app.get('/curators',function (req, res) {
 });
 
 app.get('/gettweets/:query',function(req,res){
-  client.get('search/tweets', {q: req.params.query}, function(error, tweets, response) {
-   // console.log(JSON.stringify(tweets));
-   // var obj = JSON.parse(tweets);
-    //var result={};
-    //var i=0;
-   /* for (i=0;i< obj.length;i++)
+  client.get('search/tweets', {q: req.params.query, count:100, result_type: "recent"}, function(error, tweets, response) {
+    var obj = JSON.parse(JSON.stringify(tweets));
+    var result = [];
+    var statuses = obj["statuses"];
+    var curDate = new Date().getTime() - (90 * 60000);
+    console.log("count: " + statuses.length +" ,curDate: " + curDate);
+    for (i=0;i< statuses.length;i++)
     {
-       if (obj[i].hasOwnProperty(expanded_url))
-       {
-          result.push(obj[i].expanded_url);
-       }
-     }*/
-    // console.log(obj['statuses'].expanded_url);
-     res.write(JSON.stringify(tweets));
+      var status = statuses[i];
+      var created_at = new Date(status["created_at"]);
+      if((created_at.getTime() < curDate)){
+        continue;
+      }
+      var entities = status["entities"];
+      if(entities == null){ continue; }
+      var urls = entities["urls"];
+      if(urls == null){ continue; }
+      for(var j = 0; j < urls.length; j++){
+        var url = urls[j];
+        if(url != null){
+          var expanded_url = url["expanded_url"];
+          if(expanded_url.indexOf("periscope.tv") >= 0){
+           result.push(url["expanded_url"]);
+          }
+        }
+      }
+     }
+     console.log(JSON.stringify(result));
+     res.write(JSON.stringify(result));
      res.end();
    
   });

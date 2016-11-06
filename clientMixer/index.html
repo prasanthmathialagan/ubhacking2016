@@ -51,7 +51,15 @@
     }
     
     function updatePeriscopeVideos(keyword){
-        updateRow(["https://www.periscope.tv/w/1BRKjAEVXQjxw"],"periscope");
+        var url = "http://localhost:3000/gettweets/%23periscope%20"+keyword;
+        $.get(
+            url,
+            {},
+            function(data){
+                console.log(data);
+                updateRow(JSON.parse(data),"periscope");
+            }
+            );
     }
 
     function updateFacebookVideos(keyword){
@@ -91,7 +99,6 @@
 	}
 
     function updateVideos(keyword) {
-
         updateYoutubeVideos(keyword);
         updatePeriscopeVideos(keyword);
         updateFacebookVideos(keyword);
