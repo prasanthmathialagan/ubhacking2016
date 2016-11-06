@@ -27,47 +27,42 @@
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
 
+    <![endif]-->
+    <style>
+    .headfoot {
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-top: 30px;
+            
+            color:rgb(255, 255, 255);
+            font-family:Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+        }
+        .headtext{
+            font-size:21px;
+            font-weight:700;
+            height:70px;
+            line-height:20px;
+        }
+    </style>
 </head>
 
-<body>
+<body style="font-size:24px">
 
     <!-- Navigation -->
-    <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
-    <nav id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-            <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
-            <li class="sidebar-brand">
-                <a href="#top" onclick=$("#menu-close").click();>Start Bootstrap</a>
-            </li>
-            <li>
-                <a href="#top" onclick=$("#menu-close").click();>Home</a>
-            </li>
-            <li>
-                <a href="#about" onclick=$("#menu-close").click();>About</a>
-            </li>
-            <li>
-                <a href="#services" onclick=$("#menu-close").click();>Services</a>
-            </li>
-            <li>
-                <a href="#portfolio" onclick=$("#menu-close").click();>Portfolio</a>
-            </li>
-            <li>
-                <a href="#contact" onclick=$("#menu-close").click();>Contact</a>
-            </li>
-        </ul>
-    </nav>
-
-    <!-- Header -->
-    <header id="top" class="header">
+<header style='background-color:rgb(44, 62, 80);margin:0pt;'>
+    <div class="headfoot headtext">
+        <span style="font-size:40px;" id="room_title">Curators Online</span>
+    </div>
+</header>
+  
         <div class="text-vertical-center">
-            <h1>Curators</h1>
-            <ul id="curatorslist">
-                
-            </ul>
+           
+            <table class="table table-hover" id="curatorslist">
+           
+           </table>
+           
         </div>
-    </header>
 
     <!-- jQuery -->
     <script src="/js/jquery.js"></script>
@@ -83,10 +78,10 @@
         var str = '';
         for (var i = 0; i < curators.length; i++) {
             var c = curators[i];
-            str += '<li>';
+            str += '<tr><td><img style="float:right;" width="50px" src="https://cdn1.iconfinder.com/data/icons/ninja-things-1/1772/ninja-simple-512.png"/></td><td style="float:left;">';
             str += '<a href="/viewerpage?room='+c.name+'">';
             str += c.name;
-            str += '</li>';
+            str += '<td></tr>';
         }
         console.log(str);
         $("#curatorslist").append(str);
@@ -167,6 +162,8 @@
         // Enable map zooming with mouse scroll when the user clicks the map
     $('.map').on('click', onMapClickHandler);
     </script>
+    <footer style="background-color:rgb(44, 62, 80);margin:0pt;height:50pt;position:absolute;left:0;bottom:0;overflow:hidden;width:100%"/>
+
 
 </body>
 

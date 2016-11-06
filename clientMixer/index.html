@@ -18,6 +18,54 @@
     <!-- Bootstrap Core JavaScript -->
     <script src="/js/bootstrap.min.js"></script>
     <style>
+  
+    .button {
+    position: relative;
+    background-color: #4CAF50;
+    border: none;
+    font-size: 17px;
+    color: #FFFFFF;
+    padding: 2px;
+    width: 200px;
+    margin-left:10px;
+    text-align: center;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    text-decoration: none;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.button:after {
+    content: "";
+    background: #90EE90;
+    display: block;
+    position: absolute;
+    padding-top: 300%;
+    padding-left: 350%;
+    margin-left: -20px!important;
+    margin-top: -120%;
+    opacity: 0;
+    transition: all 0.8s
+}
+
+.button:active:after {
+    padding: 0;
+    margin: 0;
+    opacity: 1;
+    transition: 0s
+}
+    div.polaroid {
+      width: 50%;
+      background-color: white;
+      box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+      margin-bottom: 25px;
+    }
+
+    div.container {
+      text-align: center;
+      padding: 10px 20px;
+    }
     .headfoot {
             padding-left: 15px;
             padding-right: 15px;
@@ -109,14 +157,14 @@
 	function createIFrameTag(url, id){
         var ifrm = "<iframe src='"
 		ifrm += url+"'";
-		ifrm += 'width=320  height=320'
+		ifrm += 'width=220  height=220 frameborder=0'
         if(id.indexOf("periscope") >= 0){
          ifrm += "style=\"-webkit-transform:scale(0.3,0.3);-moz-transform-scale(0.3,0.3);\" "   
         }
 		ifrm += ">URL Load</iframe>"
-		var buttn = "<button type=button value='"+url+"'"
+		var buttn = "<button class=button type=button value='"+url+"'"
 		buttn += "id="+id
-		buttn += " onClick=selectVideo('"+id+"'); >Select Video</button>"
+		buttn += " onClick=selectVideo('"+id+"'); ><span>Select<span></button>"
 		var tab = "<table><tr><td>"
 		tab += ifrm;
 		tab += "</td></tr><tr><td>"
@@ -127,15 +175,27 @@
 
 	function selectVideo(id){
         var buttn = document.getElementById(id);
+        $("#presel").hide();
+        $("#postsel").show();
         $("#publish").show();
+       // $("#liveVideo").hide();
 		var focusIFrame = document.getElementById("userFocus");
 		focusIFrame.src = buttn.value;
+         $("#userFocus").show();
 	}
 
 	function publishVideo(){
+
 		var focusIFrame = document.getElementById("userFocus");
 		var publishIFrame = document.getElementById("liveVideo");
 		publishIFrame.src = focusIFrame.src;
+        $("#userFocus").hide();
+        $("#publish").hide();
+        $("#prepub").hide();
+        $("#postpub").show();
+        $("#postsel").hide();
+        $("#presel").show();
+        $("#liveVideo").show();
 
         console.log('Publishing the video URL to the server ' + publishIFrame.src);
 
@@ -160,7 +220,7 @@
     </div>
      <div class="searchArea" align="center" style="margin: 20px">
     <input id="keyword" type="text">
-    <button onclick="updateVideos(document.getElementById('keyword').value);">Search</button>
+    <button class=button onclick="updateVideos(document.getElementById('keyword').value);">Search</button>
     </div>
 </header>
    
@@ -180,16 +240,26 @@
         
         </div>
         <div id="content-wrap">
-        <h2> Published Videos</h2>
+        <h2> Publish Stage</h2>
             
-        <div>
-            <iframe id="userFocus" width="500" height="400" muted="true" src="" ></iframe>
-            </div>
-            <div>
-              <button align="center" id="publish" type=button onClick="publishVideo();"> Publish Video</button>
+        <div class="polaroid">
+            <iframe hidden id="userFocus" frameborder="0" width="440" height="400" muted="true" src="" ></iframe>
+            <div class="container">
+             <p id="presel" style="float:left;">No selection yet</p>
+             <p id="postsel" hidden style="float:left;">Your Selection</p>
+             </div>
+              <div >
+              <button hidden class=button style="margin-left:5%;margin-bottom:5%;background-color:#FF0000" id="publish" type=button onClick="publishVideo();">Publish Video</button>
               </div>
-              <div>
-            <iframe id="liveVideo" width="500" height=400px muted="true" src=""></iframe>          
+            </div>
+           
+              <div class=polaroid>
+             
+            <iframe  hidden id="liveVideo" frameborder="0" width="440" height=400 muted="true" src=""></iframe>   
+             <div class="container">
+             <p style="float:left;" id="prepub">No video to broadcast</p>
+             <p hidden id="postpub" style="float:left;">This video is being broadcasted</p>
+             </div>       
             </div>
               
           
