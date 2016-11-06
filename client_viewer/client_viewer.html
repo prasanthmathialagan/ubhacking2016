@@ -52,6 +52,9 @@
     		font-weight:600;
     		font-size:19px;
     	}
+    	#messages { list-style-type: none; margin: 0; padding: 0; }
+		#messages li { padding: 5px 10px; }
+		#messages li:nth-child(odd) { background: #eee; }
 </style>
 
 <script type="text/javascript">
@@ -117,6 +120,14 @@
 		}
 	}
 
+	function onCommentReceived(msg) {
+		console.log('onCommentReceived called');
+		$('#messages').append($('<li>').text(msg));
+		// var chatbox = document.getElementById("chatbox");
+		// var comment = document.createElement("label");
+		// comment.text = msg;
+		// chatbox.appendChild(comment);
+	}
 
 </script>
 
@@ -124,6 +135,7 @@
 
 <header style='background-color:rgb(44, 62, 80);margin:0pt;'>
 <div class="headfoot headtext headshadow">
+<img src="/img/logo.png" style="height:40%" />
 <span id="room_title">Broadcaster</span>'s feed
 </div>
 </header>
@@ -157,12 +169,21 @@
 	</div>
 	</div>
 </div>
+
 <div style="float:left; width:30%;">
 
 <!-- These contain the number of emotions received-->
-<input id="emotionCount" type="hidden" value="0">
+	<div id="chatbox">
+		<ul id="messages"></ul>
+    </div>
 
+     <form name="commentform" action="">
+        <input name="usermsg" type="text" id="usermsg" size="63" />
+        <input name="comment" type="submit"  id="comment" value="Send" />
+    </form>
 </div>
+
+<input id="emotionCount" type="hidden" value="0">
 
 <!-- "border-left: 10px;border-bottom: 10px;border-top: 10px;border-right: 10px; border-style: solid;border-color:rgb(44, 62, 80);" -->
 
@@ -217,10 +238,22 @@ Live Video Jockey
 		updateEmotionsCount(JSON.parse(msg));
 	});
 
+	socket.on('comment added', function(msg){
+		console.log("Comment = " + msg);
+		onCommentReceived(msg);
+	});
+
 	function emoji_clicked(id) {
 		console.log("Emoji clicked = " + id);
 		socket.emit("emotion added", id);
 	}
+
+	$('form').submit(function(){
+      var msg = $('#usermsg').val();
+      socket.emit("send comment", msg);
+      $('#usermsg').val('');
+      return false;
+    });
 </script>
 </html>
 	
