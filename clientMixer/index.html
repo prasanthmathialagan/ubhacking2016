@@ -20,7 +20,7 @@
 
     <script type="text/javascript">
 
-    function loadYoutubeVideos(keyword){
+    function updateYoutubeVideos(keyword){
     $.get(
     "https://www.googleapis.com/youtube/v3/search?q="+keyword+"&part=id&eventType=live&type=video&videoEmbeddable=true&videoSyndicated=true&maxResults=5&key=AIzaSyCVzkiLvCg-oK2aK-ZSiF7xJaXkeHXaAek",
     {},
@@ -31,26 +31,31 @@
             var id = items[i]["id"];
             urls.push("https://www.youtube.com/embed/"+id["videoId"]+"?autoplay=1");
         }
-        loadRow(urls,"youtube");
+        updateRow(urls,"youtube");
     }
     );  
     }  
 
-    function loadRow(urls, id){
+    function updateRow(urls, id){
         var row = document.getElementById(id);
-        for(i = 0; i < urls.length; i++){
+        var rowLength = row.cells.length;
+        for(var i = 0; i < rowLength; i++) {
+            row.deleteCell(0);
+        }
+
+        for(var i = 0; i < urls.length; i++){
             var cell = row.insertCell(-1);
             var ifrm = createIFrameTag(urls[i],id+""+(i+1));
             cell.innerHTML = ifrm;                
         }
     }
     
-    function loadPeriscopeVideos(keyword){
-        loadRow(["https://www.periscope.tv/w/1BRKjAEVXQjxw"],"periscope");
+    function updatePeriscopeVideos(keyword){
+        updateRow(["https://www.periscope.tv/w/1BRKjAEVXQjxw"],"periscope");
     }
 
-    function loadFacebookVideos(keyword){
-        loadRow(["https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2FRTnews%2Fvideos%2F10154858714744411%2F&width=240&show_text=false&height=135&appId"],"facebook");
+    function updateFacebookVideos(keyword){
+        updateRow(["https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2FRTnews%2Fvideos%2F10154858714744411%2F&width=240&show_text=false&height=135&appId"],"facebook");
     }        
 
 	function createIFrameTag(url, id){
@@ -75,13 +80,6 @@
 		focusIFrame.src = buttn.value;
 	}
 
-	function buildVideoFeed(){
-        var keyword = "cats";
-		loadYoutubeVideos(keyword);
-		loadPeriscopeVideos(keyword);
-        loadFacebookVideos(keyword);
-	}
-
 	function publishVideo(){
 		var focusIFrame = document.getElementById("userFocus");
 		var publishIFrame = document.getElementById("liveVideo");
@@ -92,9 +90,24 @@
         socket.emit('publish video', publishIFrame.src);
 	}
 
+    function updateVideos(keyword) {
+
+        updateYoutubeVideos(keyword);
+        updatePeriscopeVideos(keyword);
+        updateFacebookVideos(keyword);
+    }
+
     </script>
+    
+
     </head>
-    <body class="container" onload="buildVideoFeed()">
+    <body class="container">
+    
+    <div class="searchArea" align="center" style="margin: 20px">
+    <input id="keyword" type="text">
+    <button onclick="updateVideos(document.getElementById('keyword').value);">Search</button>
+    </div>
+
     <h1 id="uname"></h1>
     <div class="table">
         <table class="table table-striped" id="table1">
