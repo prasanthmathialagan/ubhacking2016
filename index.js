@@ -54,7 +54,7 @@ app.get('/gettweets/:query',function(req,res){
     var obj = JSON.parse(JSON.stringify(tweets));
     var result = [];
     var statuses = obj["statuses"];
-    var curDate = new Date().getTime() - (90 * 60000);
+    var curDate = new Date().getTime() - (10 * 60000);
     console.log("count: " + statuses.length +" ,curDate: " + curDate);
     for (i=0;i< statuses.length;i++)
     {
