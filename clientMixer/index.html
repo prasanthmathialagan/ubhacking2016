@@ -26,7 +26,6 @@
             var id = items[i]["id"];
             urls.push("https://www.youtube.com/embed/"+id["videoId"]+"?autoplay=1");
         }
-        console.log(urls);  
         loadRow(urls,"youtube");
     }
     );  
@@ -48,36 +47,34 @@
     function loadFacebookVideos(keyword){
         loadRow(["https://www.facebook.com/plugins/video.php?href=https%3A%2F%2Fwww.facebook.com%2FRTnews%2Fvideos%2F10154858714744411%2F&width=240&show_text=false&height=135&appId"],"facebook");
     }        
+
 	function createIFrameTag(url, id){
-		var ifrm = "<iframe src='"
+        var ifrm = "<iframe src='"
 		ifrm += url+"'";
 		ifrm += 'width=320 '
 		ifrm += ">URL Load</iframe>"
-
 		var buttn = "<button type=button value='"+url+"'"
 		buttn += "id="+id
-		buttn += " onClick=selectVideo("+id+"); >Select Video</button>"
+		buttn += " onClick=selectVideo('"+id+"'); >Select Video</button>"
 		var tab = "<table><tr><td>"
-		
 		tab += ifrm;
 		tab += "</td></tr><tr><td>"
 		tab += buttn
 		tab += "</td></tr></table>"
-		console.log(tab);
 		return tab;
 	}
 
 	function selectVideo(id){
-		var buttn = document.getElementById(id);
+        var buttn = document.getElementById(id);
 		var focusIFrame = document.getElementById("userFocus");
-		console.log(buttn.value);
 		focusIFrame.src = buttn.value;
 	}
 
 	function buildVideoFeed(){
-		loadYoutubeVideos("cats");
-		loadPeriscopeVideos("cats");
-        loadFacebookVideos("cats");
+        var keyword = "cats";
+		loadYoutubeVideos(keyword);
+		loadPeriscopeVideos(keyword);
+        loadFacebookVideos(keyword);
 	}
 
 	function publishVideo(){
@@ -103,7 +100,7 @@
         		<iframe id="userFocus" src=""></iframe>
         		</td>
         		<td>
-        			<iframe id="liveVideo" src="" ></iframe>			
+        		<iframe id="liveVideo" src="" ></iframe>			
         		</td>
         	</tr>
         	<tr><td>
