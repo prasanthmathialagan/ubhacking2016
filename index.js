@@ -8,7 +8,6 @@ var curators = [];
 var curator_sockets = [];
 var sockets_to_rooms = new Map();
 
-const VIEWER_URL = __dirname + '/client_viewer/client_viewer.html';
 var client = new Twitter({
    consumer_key: 'rnkH5fxqVdwevxOFj63lPUIjX',
    consumer_secret: 'zXmUisyQicPgJ85WhQwh3Q3LBQi7zp1nK7C18xgt2suGPIvicK',
@@ -45,8 +44,7 @@ app.get('/viewerpage', function(req, res){
 });
 
 app.get('/curators',function (req, res) {
-  res.write(JSON.stringify({"Curators":curators}));
-  res.end();
+  res.sendFile(__dirname + '/client_viewer/index.html');
 });
 
 app.get('/gettweets/:query',function(req,res){
@@ -122,6 +120,13 @@ io.on('connection', function(socket){
     console.log('Video to be published : ' + msg);
     var room_name = sockets_to_rooms.get(socket);
     io.to(room_name).emit('publish video', msg);
+  });
+
+  socket.on('get curators', function(msg){
+    console.log('get curators called');
+   	var obj = {};
+    obj['curators'] = curators;
+    socket.emit('post curators', JSON.stringify(obj));
   });
   
   socket.on('chat message', function(msg){

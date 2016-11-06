@@ -62,19 +62,13 @@
     <!-- Header -->
     <header id="top" class="header">
         <div class="text-vertical-center">
-            <h1>Video View</h1>
-            <h3>Login As<br>
-              <input  type="textbox" placeholder="Username" id="name" aria-describedby="basic-addon1">
-            </h3>
-            <br>
-           
-
-            <a href="#" class="btn btn-dark btn-lg" id="curator">Curator</a>
-            <a href="#" class="btn btn-dark btn-lg" id="viewer">Viewer</a>
+            <h1>Curators</h1>
+            <ul id="curatorslist">
+                
+            </ul>
         </div>
     </header>
 
- 
     <!-- jQuery -->
     <script src="/js/jquery.js"></script>
      <script src="/socket.io/socket.io.js"></script>
@@ -82,12 +76,20 @@
     <script src="/js/bootstrap.min.js"></script>
   <script>
     var socket = io();
-    $('#curator').click(function(){
-        window.location.href = "/curatorpage?name=" + $('#name').val();
-      });
-
-    $('#viewer').click(function(){
-        window.location.href = "/curators";
+    socket.emit('get curators', "");
+    socket.on('post curators', function(msg){
+        console.log("post curators called")
+        var curators = JSON.parse(msg)['curators'];
+        var str = '';
+        for (var i = 0; i < curators.length; i++) {
+            var c = curators[i];
+            str += '<li>';
+            str += '<a href="/viewerpage?room='+c.name+'">';
+            str += c.name;
+            str += '</li>';
+        }
+        console.log(str);
+        $("#curatorslist").append(str);
     });
 
   </script>
