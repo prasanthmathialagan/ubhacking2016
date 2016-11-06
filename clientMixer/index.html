@@ -17,7 +17,47 @@
      <script src="/socket.io/socket.io.js"></script>
     <!-- Bootstrap Core JavaScript -->
     <script src="/js/bootstrap.min.js"></script>
+    <style>
+    .headfoot {
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-top: 30px;
+            
+            color:rgb(255, 255, 255);
+            font-family:Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+        }
+        .headtext{
+            font-size:40px;
+            font-weight:700;
+            height:50px;
+            line-height:20px;
+        }
+        #main-wrap > div { min-height: 450px; }
 
+
+    #header,
+    #footer {
+        min-height: 40px;
+    }
+
+    /* layout */
+    #main-wrap {
+        /* overflow to handle inner floating block */
+        overflow: hidden;
+    }
+
+    #sidebar {
+        float: left;
+        width: 50%;
+    }
+
+    #content-wrap {
+        float: right;
+        width: 48%;
+       
+    }   
+
+    </style>
     <script type="text/javascript">
 
     function updateYoutubeVideos(keyword){
@@ -87,6 +127,7 @@
 
 	function selectVideo(id){
         var buttn = document.getElementById(id);
+        $("#publish").show();
 		var focusIFrame = document.getElementById("userFocus");
 		focusIFrame.src = buttn.value;
 	}
@@ -111,36 +152,52 @@
     
 
     </head>
-    <body class="container" onload="updateVideos('cat')">
-    
-    <div class="searchArea" align="center" style="margin: 20px">
+
+    <body style="margin:0px;background-color: rgb(24, 188, 156);" onload="updateVideos('cat')">
+    <header style='background-color:rgb(44, 62, 80);margin:0pt;height:100px'>
+    <div class="headfoot headtext">
+        <span id="room_title">Curator</span>'s feed
+    </div>
+     <div class="searchArea" align="center" style="margin: 20px">
     <input id="keyword" type="text">
     <button onclick="updateVideos(document.getElementById('keyword').value);">Search</button>
     </div>
-
-    <h1 id="uname"></h1>
+</header>
+   
+<div id="main-wrap">
+  
+    <div id="sidebar">
+   <h2>Youtube Live</h2>
     <div class="table">
-        <table class="table table-striped" id="table1">
+        <table id="table1" style="display: block;overflow-x: auto;">
         <tr id="youtube"></tr>
-        <tr id="facebook"></tr>
+        </table>
+        <h2>Periscope</h2>
+        <table id="table2" style="display: block;overflow-x: auto;">
         <tr id="periscope"></tr>
         </table>
         </div>
-        <div class="table-responsive">
-        <table class="table" id="table2">
-        	<tr>
-        		<td>
-        		<iframe id="userFocus" width="480" height="480" src=""></iframe>
-        		</td>
-        		<td>
-        		<iframe id="liveVideo" width="480" height="480" src="" ></iframe>			
-        		</td>
-        	</tr>
-        	<tr><td>
-        	<button type=button onClick="publishVideo();"> Publish Video</button>
-        	</td></tr>
-        </table>  
+        
         </div>
+        <div id="content-wrap">
+        <h2> Published Videos</h2>
+            
+        <div>
+            <iframe id="userFocus" width="500" height="400" muted="true" src="" ></iframe>
+            </div>
+            <div>
+              <button align="center" id="publish" type=button onClick="publishVideo();"> Publish Video</button>
+              </div>
+              <div>
+            <iframe id="liveVideo" width="500" height=400px muted="true" src=""></iframe>          
+            </div>
+              
+          
+            
+        </div>
+        </div>
+        <footer style="background-color:rgb(44, 62, 80);margin:0pt;height:50pt;position:relative;left:0;bottom:0;overflow:hidden;width:100%">
+
     </body>
 
     <script type="text/javascript">
@@ -152,7 +209,7 @@
         obj['img'] = 'Testimage';
         socket.emit('register curator', JSON.stringify(obj));
 
-        $('#uname').text(name);
+        $('#room_title').text(name);
 
     </script>
 </html>

@@ -29,42 +29,115 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
 
+<style>
+.headfoot {
+            padding-left: 15px;
+            padding-right: 15px;
+            padding-top: 30px;
+            
+            color:rgb(255, 255, 255);
+          ;
+        }
+        .headtext{
+            font-size:21px;
+            font-weight:700;
+            height:50px;
+            line-height:20px;
+        }
+.container {
+    padding-right: 15px;
+    padding-left: 15px;
+    margin-right: auto;
+    margin-left: auto;
+}
+footer .footer-above {
+    padding-top: 50px;
+    background-color: #2C3E50;
+}
+footer {
+    color: #fff;
+}
+.text-center {
+    text-align: center;
+}
+.navbar-default {
+    background-color: #f8f8f8;
+    border-color: #e7e7e7;
+}
+
+.navbar-fixed-bottom, .navbar-fixed-top {
+    border-radius: 0;
+}
+.navbar-custom {
+    background: #2C3E50;
+    font-weight: 700;
+    border: none;
+}
+.navbar-custom, header .intro-text .name {
+    font-family: Montserrat,"Helvetica Neue",Helvetica,Arial,sans-serif;
+    text-transform: uppercase;
+}
+
+.navbar-custom {
+    padding: 25px 0;
+    -webkit-transition: padding .3s;
+    -moz-transition: padding .3s;
+    transition: padding .3s;
+}
+.navbar-fixed-bottom, .navbar-fixed-top {
+    position: fixed;
+    right: 0;
+    left: 0;
+    z-index: 1030;
+}
+footer .footer-below {
+    padding: 25px 0;
+    background-color: #233140;
+}
+</style>
 </head>
 
-<body>
+
+<body style="margin:0px;background-color: rgb(24, 188, 156);">
 
     <!-- Navigation -->
-    <a id="menu-toggle" href="#" class="btn btn-dark btn-lg toggle"><i class="fa fa-bars"></i></a>
-    <nav id="sidebar-wrapper">
-        <ul class="sidebar-nav">
-            <a id="menu-close" href="#" class="btn btn-light btn-lg pull-right toggle"><i class="fa fa-times"></i></a>
-            <li class="sidebar-brand">
-                <a href="#top" onclick=$("#menu-close").click();>Start Bootstrap</a>
-            </li>
-            <li>
-                <a href="#top" onclick=$("#menu-close").click();>Home</a>
-            </li>
-            <li>
-                <a href="#about" onclick=$("#menu-close").click();>About</a>
-            </li>
-            <li>
-                <a href="#services" onclick=$("#menu-close").click();>Services</a>
-            </li>
-            <li>
-                <a href="#portfolio" onclick=$("#menu-close").click();>Portfolio</a>
-            </li>
-            <li>
-                <a href="#contact" onclick=$("#menu-close").click();>Contact</a>
-            </li>
-        </ul>
-    </nav>
+<nav id="mainNav" class="navbar navbar-default navbar-fixed-top navbar-custom affix-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="#page-top"></a>
+            </div>
 
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden active">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="#portfolio"></a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="#about"></a>
+                    </li>
+                    <li class="page-scroll">
+                        <a href="#contact"></a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
     <!-- Header -->
-    <header id="top" class="header">
-        <div class="text-vertical-center">
-            <h1>Video View</h1>
+    <header id="top" class="headfoot header">
+        <div class="text-vertical-center form-group">
+            <h1>Live <span>DJ<span></h1>
             <h3>Login As<br>
-              <input  type="textbox" placeholder="Username" id="name" aria-describedby="basic-addon1">
+              <input class="form-controltype="textbox" placeholder="Username" id="name" aria-describedby="basic-addon1">
             </h3>
             <br>
            
@@ -73,6 +146,7 @@
             <a href="#" class="btn btn-dark btn-lg" id="viewer">Viewer</a>
         </div>
     </header>
+<footer style="background-color:rgb(44, 62, 80);margin:0pt;height:0pt;position:absolute;left:0;bottom:0;overflow:hidden;width:100%">
 
  
     <!-- jQuery -->
@@ -90,6 +164,19 @@
         window.location.href = "/curators";
     });
 
+    /* $('#viewer').click(function(){
+    
+        var obj = {};
+        obj['id'] = msg % 20;
+        socket.emit('register viewer', JSON.stringify(obj));
+
+    });*/
+/*    socket.on('chat message', function(msg){
+      $('#messages').append($('<li>').text(msg));
+    });
+    socket.on('update viewers', function(msg){
+      $('#messages').append($('<li>').text('Current viewers = ' + msg));
+    });*/
   </script>
 
     <!-- Custom Theme JavaScript -->
