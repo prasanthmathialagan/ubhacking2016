@@ -197,6 +197,12 @@ io.on('connection', function(socket){
     io.to(room_name).emit('emotion count', JSON.stringify(emojis_count));
   });
 
+  socket.on('send comment', function(msg){
+    console.log('comment: ' + msg);
+    var room_name = sockets_to_rooms.get(socket);
+    io.to(room_name).emit('comment added', msg);
+  });
+
   socket.on('disconnect', function(){
     console.log('user disconnected');
 
